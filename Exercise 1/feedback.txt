@@ -1,0 +1,33 @@
+Feedback Exercise 1:
+
+Task 1.1: 1.0 / 1.0 points.
+
+----------------------------------
+Task 1.2: 4.0 / 4.0 points.
+
+----------------------------------
+Task 1.3: 1.0 / 2.0 points.
+You are using the n_data (and a random + 1) to get the degree dimension. With a different amount of data,  points youre implemenation will throw an error; Your solving method is not ideal, check the solutions please
+----------------------------------
+Task 1.4: 1.0 / 1.0 points.
+
+----------------------------------
+Task 2.1: 3.0 / 3.0 points.
+
+----------------------------------
+Task 2.2: 3.5 / 4.0 points.
+derivative w.r.t. mu: wrong sign
+----------------------------------
+Task 2.3: 1.0 / 1.0 points.
+
+----------------------------------
+Task 3: 3.0 / 4.0 points.
+Your batch consists of the whole feature set
+----------------------------------
+Total score: 17.5/20.0
+
+
+
+
+If you have questions regarding the correction, please contact the tutor Philipp Dahlinger at
+uyxuz@student.kit.edu
