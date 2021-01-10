@@ -1,0 +1,27 @@
+Feedback Exercise 2:
+
+Task 1.1: 2.0 / 4.0 points.
+sum over h_i,k not expanded correctly
+----------------------------------
+Task 1.2: 0.5 / 3.0 points.
+wrong normalization of loss; could not follow gradient implementation, how are the labels implemented?
+----------------------------------
+Task 2: 3.0 / 3.0 points.
+
+----------------------------------
+Task 3.1: 4.0 / 4.0 points.
+
+----------------------------------
+Task 3.2: 4.0 / 4.0 points.
+
+----------------------------------
+Task 3.5: 1.5 / 2.0 points.
+second explanation wrong/does not explain the lower std, but maybe only a lower error in general
+----------------------------------
+Total score: 15.0/20.0
+
+
+
+
+If you have questions regarding the correction, please contact the tutor Philipp Dahlinger at
+uyxuz@student.kit.edu
