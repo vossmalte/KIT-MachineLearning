@@ -1,0 +1,19 @@
+Feedback Exercise 3:
+
+Task 1: 5.0 / 6.0 points.
+Some calculation mistakes in solving dual, otherwise good
+What if your computed lambda* < 0? This would not be allowed. In that case lambda* = 0 and you get the global optimum as the solution. We didn‘t deduct points for that though. To check out an example, have a look at this graph: https://www.desmos.com/calculator/kvayjkpjbf The dark side is the area where the solution is allowed.
+----------------------------------
+Task 2: 7.0 / 7.0 points.
+
+----------------------------------
+Task 3: 5.0 / 7.0 points.
+Log_like: inner exp around log_like of gaussian, inner sum and outer log missing
+----------------------------------
+Total score: 17.0/20.0
+
+
+
+
+If you have questions regarding the correction, please contact the tutor Philipp Dahlinger at
+uyxuz@student.kit.edu
