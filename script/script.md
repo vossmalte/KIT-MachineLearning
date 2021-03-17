@@ -204,6 +204,65 @@ Zusammenfassung der Vorlesung _Maschinelles Lernen -- Grundverfahren_ von Prof. 
 
 ## Dimensionality Reduction
 
+### Linear Dimensionality Reduction
+
+- Goal: minimize loss when projecting data points to lower dimension
+- Notation: original data $x_i \in \mathbb{R}^D$, representation $z_i \in \mathbb{R}^M$ with mapping $W \in \mathbb{R}^{M \times D}$: $z = Wx$ (Zeilen von $W$: $u_i$'s, orthonormal)
+- Reproduction: $x \approx W^T z$
+- Loss: squared reproduction error (equiv.: variance of projection, after zero-mean)
+
+- How: PCA (Principle Component Analysis)
+  - idea: first principal dimension is direction of maximal variance (biggest Eigenvector of $\Sigma$), solve constraint optimisation: $u_1 = \min_u u^T\Sigma u$ so that $u^T u = 1$)
+  - zero-mean data
+  - compute covariance matrix
+  - choose first M largest Eigenvalues
+- How to choose dimension?
+  - based of application performance or so that some fraction of the variance is covered
+- Applications: lower dimension and find more natural coordinate system, ``capture the essence''
+
+### Constraint Optimisation (Langrangian Multipliers)
+
+- $\min_x f(x) \text{ so that } foo \geq 0$: lagrangian $= f(x) - \lambda (foo)$.
+- optimization: $\min_x \max_\lambda L(x,\lambda)$, $\lambda > 0$
+- slatters condition: convex objective and convex constraints, dual is equivalent:
+  - dual: $\lambda^* = \max_\lambda \min_x L(x, \lambda)$ 
+  - then $x^* = \min_x L(x, \lambda^*)$
+
+## Clustering
+
+- Goal: find structure in data
+- need a distance measure / metric
+
+### Hierarchical Clustering: Dentogram
+
+- Tree, similarity = height of lowest common node
+- Properties: 
+  - find number of clusters
+  - detecting outliers
+- Construction:
+  - bottom-up: merge ``closest'' clusters
+    - single linkage: minimum distance of points
+    - complete linkage: maximum distance of points
+    - average linkage
+    - centroid linkage
+  - (top-down)
+
++ intuitive, but costly
+
+### Flat Clustering: K-Means
+
+- Goal: minimize sum of squared distances
+- Algorithm:
+  - Pick k, place k ``cluster centers'' random or using Furthest First Initialisation: 
+    - first center random data point
+    - other centers at data point with max. min. distance from placed centers
+  - Assign each sample to its closest centroid
+  - put ``cluster centers'' on mean of the samples assigned to them
+- Convergence: (locally) minimizes the sum of squared differences - BUT: only local minimum
+  - try multiple initializations
+- Choose k: "knee-finding method" using plot of SSD of result
+- quick, but needs metric, can't handle outliers, noise or non-convex shapes
+
 ## Density Estimation
 
 ## Expectation Maximization
