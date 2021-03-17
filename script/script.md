@@ -141,6 +141,48 @@ Zusammenfassung der Vorlesung _Maschinelles Lernen -- Grundverfahren_ von Prof. 
 
 ## Model Selection
 
+- true (random test point) risk vs. empirical (test set) risk
+- too complex model $\Rightarrow$ overfitting
+  - unexpected behavior in between training points
+  - training error goes down, validation error goes up
+- too simple model $\Rightarrow$ underfitting
+  - both training and validation error high
+- true risk is u-shaped over the complexity
+- Bias-Variance Decomposition
+  - Expected Loss = Variance + Bias² + Noise
+  - Bias due to restriction of model class (_structure error_)
+  - Variance due to randomness of the data set
+  - ![ ](bias-variance-decomposition.png)
+
+### Evaluation Methods
+
+- Hold-out method
+  - split in training and validation
+  - choose model with best performance on validation
+  - "unlucky" splits cause misleading results
+- k-fold cross validation
+  - creates k predictors for each model class
+  - Leave-One-Out: k = size of the data set (validate with 1 sample)
+  - random sub-sampling: just take some samples for validation
+
+### Regularization techniques
+
+- Occam's Razor: prefer simpler explanations over complex ones
+- Limit model complexity (neurons, leaves, polynomial order, ...)
+- regularization penalty
+  - small parameters $\Rightarrow$ smoother function estimate
+  - $L_2, L_1$ penalty
+- early stopping
+  - do not push the model too much
+  - use validation error to decide when to stop
+  - efficient / simple but needs validation data
+  - similar effect as $L_2$
+- Noise
+  - add noise to the inputs $\Rightarrow$ rules out non-robust solutions
+  - equivalent to $L_2$ for linear regression
+- Data Augmentation
+  - create additional samples (flip, rotate, crop, ...)
+
 ## Trees and Forests
 
 ## Dimensionality Reduction
