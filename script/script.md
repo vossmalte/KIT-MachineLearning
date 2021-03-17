@@ -18,7 +18,7 @@ Zusammenfassung der Vorlesung _Maschinelles Lernen -- Grundverfahren_ von Prof. 
 
 - Supervised Learning: Training data includes targets / labels
   - Regression: Learn continuos function
-  - Classification: Learn class labels
+  - Classification: Learn (discrete) class labels
 - Unsupervised Learning: Training data does _not_ include labels
   - Model the data
   - Clustering (k-means)
@@ -30,6 +30,28 @@ Zusammenfassung der Vorlesung _Maschinelles Lernen -- Grundverfahren_ von Prof. 
 - Matrix calculus: $\nabla_x f(x) := \frac{\partial f(x)}{\partial x}$
   - $\nabla_x x^T x = 2x$
   - $\nabla_x x^T A x = 2 A x$
+
+### Probability Theory
+
+- random variable $X$, $p(x)$ is the probability of $X$ to be $x$
+- $p(x)$ is the density function
+- joint distribution $p(x,y)$: probability of $x$ _and_ $y$
+- conditional distribution $p(x|y)$: probability of x given y
+- sum rule: $p(x) = \sum_y p(x,y)$
+- chain rule: $p(x,y)$ = p(x|y) p(y)
+- Bayes rule: $p(x|y) = \frac{p(y|x)p(x)}{p(y)}$ _very important_
+- Expectation of a function $f$ with distribution $p$: $\mathbb{E}_p(f(x)) = \int p(x)f(x)dx$
+- Monte-carlo estimation: $\mathbb{E}_p (f(x)) = 1/N \sum_{x_i \sim p(x)} f(x_i)$ _approximate by samples_
+- Distributions: Bernoulli, Gaussian
+
+### Maximum Likelihood Estimation
+
+- find parameter $\theta$ for $p_\theta$
+- Data $x$ given with labels $y$
+- Fitness of $p_\theta$: $\prod_i p_\theta(x_i,y_i)$ _higher = better_
+- product is hard to differentiate, take $\log$ to make it a sum
+- also works for conditional distributions (supervised learning)
+- MLE $\Leftrightarrow$ SSE for conditional gaussian models with constant noise
   
 ## Linear Regression
 
@@ -64,7 +86,100 @@ Zusammenfassung der Vorlesung _Maschinelles Lernen -- Grundverfahren_ von Prof. 
 
 ## Linear Classification
 
+- Generative Models (c$\mapsto$x)
+  - assume class prior $p(c)$ and class density $p(x|c)$
+  - predict by computing posterior $p(c|x)$ with Bayes rule
+  - assumptions, e.g. Gaussian, can introduce big errors
+- Discriminative Models (c$\mapsto$x)
+  - estimate parameters of $p(c|x)$ from training data
+  - simpler than generative models
+
+- Binary classifier $f(x_i) = \begin{cases}>0 &\text{if } y_i = 1 \\ <0 & \text{if } y_i = 0\end{cases}$
+- Linear classifier: $f(x) = w^Tx+b$
+  - $w$ is normal to the discrimative hyperplane, $b$ is bias
+- not all data is linear separable (e.g. two moons)
+
+### Loss functions
+
+- 01-loss (step function) is NP-hard to optimize
+- SSE is not robust to outliers
+- sigmoid $\sigma(x) = 1 / (1+e^{-x})$ _squishifier_
+  - probabilistic view: $p(c=1|x) = \sigma(w^Tx+b)$
+  - $p(c|x) = p(c=1|x)^c p(c=0|x)^{1-c}$
+  - do log-likelihood with the above $\rightarrow$ _cross-entropy loss_
+  - optimizing cross-entropy loss is called _logistic regression_ (is still convex)
+  - no closed form solution but there is _gradient descent_
+
+- use feature space to transform input space into a linear separable problem, _Generalized Logistic Models_
+
+- Regularization: regularization penalty, e.g. $||w||^2$
+
+### Gradient Descent
+
+- finds a minimum (not necessarily the global minimum unless convex)
+- $x_{t+1} = x_t - \eta \nabla f(x_t)$, $\eta$ is the the learning rate, gradient points in the direction of steepest ascent
+- choose a good $\eta$, or the algorithm will not converge or be very slow
+- when to terminate: small gradient, small change in function value, fixed number of steps (time, budget)
+
+- _stochastic gradient descent_: don't use all training data, just a random sample
+  - struggles to find the exact optimum (drunk man down the hill)
+  - batch gradients require more (redundant computation)
+  - mini-batches are good for GPU computation
+
+- diminishing step size, e.g. $\eta_t = 1/t$
+  - if $\sum_t \eta_t$ does not converge but $\sum_t \eta_t^2$ does
+
+### Multi-class Classification
+
+- softmax: $p(c=i|x) = \frac{\exp(w_i^T\Phi(x))}{\sum_k \exp(w_k^T\Phi(x))}$
+  - each class gets a weight vector
+  - if only two classes choose sigmoid
+- as conditional multinomial distribution: $p(c|x) = \prod_k p(c=k|x)^{h_{c,k}}$
+  - use log-likelihood and gradient descent
+
 ## Model Selection
+
+- true (random test point) risk vs. empirical (test set) risk
+- too complex model $\Rightarrow$ overfitting
+  - unexpected behavior in between training points
+  - training error goes down, validation error goes up
+- too simple model $\Rightarrow$ underfitting
+  - both training and validation error high
+- true risk is u-shaped over the complexity
+- Bias-Variance Decomposition
+  - Expected Loss = Variance + Bias² + Noise
+  - Bias due to restriction of model class (_structure error_)
+  - Variance due to randomness of the data set
+  - ![ ](bias-variance-decomposition.png)
+
+### Evaluation Methods
+
+- Hold-out method
+  - split in training and validation
+  - choose model with best performance on validation
+  - "unlucky" splits cause misleading results
+- k-fold cross validation
+  - creates k predictors for each model class
+  - Leave-One-Out: k = size of the data set (validate with 1 sample)
+  - random sub-sampling: just take some samples for validation
+
+### Regularization techniques
+
+- Occam's Razor: prefer simpler explanations over complex ones
+- Limit model complexity (neurons, leaves, polynomial order, ...)
+- regularization penalty
+  - small parameters $\Rightarrow$ smoother function estimate
+  - $L_2, L_1$ penalty
+- early stopping
+  - do not push the model too much
+  - use validation error to decide when to stop
+  - efficient / simple but needs validation data
+  - similar effect as $L_2$
+- Noise
+  - add noise to the inputs $\Rightarrow$ rules out non-robust solutions
+  - equivalent to $L_2$ for linear regression
+- Data Augmentation
+  - create additional samples (flip, rotate, crop, ...)
 
 ## Trees and Forests
 
