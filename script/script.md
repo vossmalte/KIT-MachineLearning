@@ -59,7 +59,7 @@ Zusammenfassung der Vorlesung _Maschinelles Lernen -- Grundverfahren_ von Prof. 
 - objective: minimize sum of squared error: $\text{SSE} = \sum_i^N (y_i - f(x_i))^2$
 - this estimates the mean of the target function: $f(x) = \mathbb{E}(y | x)$
 - Matrix form: $\text{SSE} = (y - X w)^T (y - X w)$
-- $\nabla_w \text{SSE} = 0$ yields a closed form solution: $w^* = (X^T X)^{-1}X^T X y$
+- $\nabla_w \text{SSE} = 0$ yields a closed form solution: $w^* = (X^T X)^{-1}X^T y$
 - solution available because quadratic in weights (convex, differentiable)
 
 ### Quality of the model
@@ -78,13 +78,11 @@ Zusammenfassung der Vorlesung _Maschinelles Lernen -- Grundverfahren_ von Prof. 
 - error on the _training set_ is not an indication for a good fit $\Rightarrow$ need independent _test set_
 
 ### Regularization
-
-- Goal: limit the model to not fit the training data perfectly anymore
-- simple approach: force weights to be small
+- prevent overfitting by forcing small weights
   - cost function: data term + regularization term, $E_D(w) + \lambda E_W(w)$
   - $\lambda$ is _regularization factor_, often needs manual tuning (strong underfitting / no effect possible)
-  - Ridge regression (for SSE): $\lambda E_W(w) = \lambda w^t w$
-    - optimal solution: $w^*_\text{ridge} = \Phi^T \Phi + \lambda I)^{-1}\Phi^T y$
+  - Ridge regression (for SSE): $\lambda E_W(w) = \lambda w^T w$
+    - optimal solution: $w^*_\text{ridge} = (\Phi^T \Phi + \lambda I)^{-1}\Phi^T y$
 
 ## Linear Classification
 
