@@ -185,6 +185,25 @@ Zusammenfassung der Vorlesung _Maschinelles Lernen -- Grundverfahren_ von Prof. 
 
 ## Trees and Forests
 
+### k-Nearest-Neighbor
+
+- kNN is a non-parametric (_instance-based_) methods, i.e. stores all training data and use these for predictions
+  - fast / no training
+  - complexity adapts to training input
+  - slow prediction
+  - bad at high-dim input
+- kNN: find k nearest neighbors and return "average" of these
+- decision boundary ~ Voronoi diagram
+- choose k by cross-validation (small k $\Rightarrow$ overfitting)
+- metrics: euclidean, cosine, hamming, manhattan, Mahalanobis
+- performance of kNN degrades with more (irrelevant) dimensions
+- curse of dimensionality
+  - in high dimensions most points are far away from the origin
+  - most points are equally far away from each other $\Rightarrow$ neighborhood is hard to calculate
+  - remedies: feature selection, dimensionality reduction
+- KD-trees to find the neighbors
+  - choose axis, split at median, repeat until a
+
 ## Dimensionality Reduction
 
 ## Density Estimation
