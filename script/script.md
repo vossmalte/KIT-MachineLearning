@@ -78,6 +78,7 @@ Zusammenfassung der Vorlesung _Maschinelles Lernen -- Grundverfahren_ von Prof. 
 - error on the _training set_ is not an indication for a good fit $\Rightarrow$ need independent _test set_
 
 ### Regularization
+
 - prevent overfitting by forcing small weights
   - cost function: data term + regularization term, $E_D(w) + \lambda E_W(w)$
   - $\lambda$ is _regularization factor_, often needs manual tuning (strong underfitting / no effect possible)
@@ -200,7 +201,27 @@ Zusammenfassung der Vorlesung _Maschinelles Lernen -- Grundverfahren_ von Prof. 
   - most points are equally far away from each other $\Rightarrow$ neighborhood is hard to calculate
   - remedies: feature selection, dimensionality reduction
 - KD-trees to find the neighbors
-  - choose axis, split at median, repeat until a
+  - _build_: choose axis, split at median, repeat until only leafs
+  - _search_: find region containing x, then move up recursively to extend neighborhood
+
+### Classification & Regression Trees
+
+- nodes are (binary) splitting criterions
+  - in regression: return average of the node
+    - left / right split with residual sum of squares (RSS)
+  - in classification: majority vote
+    - left / right split with minimum entropy in subtrees
+- when to stop splitting? minimum number of samples per node or maximum depth reached
+- small number of samples per leaf $\Rightarrow$ sensitive to noise
+- easy but not too accurate and instable
+
+### Random forests
+
+- use average of multiple trees to improve accuracy
+- randomization: grow some trees
+  - at each node: select some samples and do the split
+  - effect: increased variability of the single trees, a tree is less likely to over-specialize, all trees are less likely to overfit
+- Random forest is a good ML method but not easy to interpret
 
 ## Dimensionality Reduction
 
@@ -236,7 +257,7 @@ Zusammenfassung der Vorlesung _Maschinelles Lernen -- Grundverfahren_ von Prof. 
 ### Hierarchical Clustering: Dentogram
 
 - Tree, similarity = height of lowest common node
-- Properties: 
+- Properties:
   - find number of clusters
   - detecting outliers
 - Construction:
@@ -247,13 +268,13 @@ Zusammenfassung der Vorlesung _Maschinelles Lernen -- Grundverfahren_ von Prof. 
     - centroid linkage
   - (top-down)
 
-+ intuitive, but costly
+- intuitive, but costly
 
 ### Flat Clustering: K-Means
 
 - Goal: minimize sum of squared distances
 - Algorithm:
-  - Pick k, place k ``cluster centers'' random or using Furthest First Initialisation: 
+  - Pick k, place k ``cluster centers'' random or using Furthest First Initialisation:
     - first center random data point
     - other centers at data point with max. min. distance from placed centers
   - Assign each sample to its closest centroid
