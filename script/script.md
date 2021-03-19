@@ -233,7 +233,7 @@ Zusammenfassung der Vorlesung _Maschinelles Lernen -- Grundverfahren_ von Prof. 
 - Loss: squared reproduction error (equiv.: variance of projection, after zero-mean)
 
 - How: PCA (Principle Component Analysis)
-  - idea: first principal dimension is direction of maximal variance (biggest Eigenvector of $\Sigma$), solve constraint optimisation: $u_1 = \min_u u^T\Sigma u$ so that $u^T u = 1$)
+  - idea: first principal dimension is direction of maximal variance (biggest Eigenvector of $\Sigma$), solve constraint optimization: $u_1 = \min_u u^T\Sigma u$ so that $u^T u = 1$)
   - zero-mean data
   - compute covariance matrix
   - choose first M largest Eigenvalues
@@ -241,7 +241,7 @@ Zusammenfassung der Vorlesung _Maschinelles Lernen -- Grundverfahren_ von Prof. 
   - based of application performance or so that some fraction of the variance is covered
 - Applications: lower dimension and find more natural coordinate system, ``capture the essence''
 
-### Constraint Optimisation (Langrangian Multipliers)
+### Constraint Optimization (Lagrangian Multipliers)
 
 - $\min_x f(x) \text{ so that } foo \geq 0$: lagrangian $= f(x) - \lambda (foo)$.
 - optimization: $\min_x \max_\lambda L(x,\lambda)$, $\lambda > 0$
@@ -305,7 +305,7 @@ Zusammenfassung der Vorlesung _Maschinelles Lernen -- Grundverfahren_ von Prof. 
   - find out min. radius of kernel (sphere, ...) so that K data points inside
 - Hyperparameter! (bin size / kernel bandwidth / K) $\rightarrow$ use Cross-validation.
 
-### Micture Models
+### Mixture Models
 
 - Idea: Weighted sum of individual distributions.
 - GMM (Gaussian Mixture Model) parameters: coefficients (``weights''), means, variances
@@ -321,7 +321,29 @@ Zusammenfassung der Vorlesung _Maschinelles Lernen -- Grundverfahren_ von Prof. 
   1. M: maximize lower bound (maximize $\phi$): increases likelihood
 
 - Todo a lot of shit but i dont understand EM... :)
+
 ## Kernel Methods
+
+### Kernels
+
+- point-wise comparison
+- comparison function $k:X\times X \to \mathbb{R}$
+- kernel matrix $K_{ij} = k(x_i,x_j)$ of size $n\times n$, $n$ is the number of samples
+- poor scalability
+- positive definite kernel function if symmetric and similarity matrix $K$ is positive definite
+- _kernel methods_ are algorithms that take $K$ as input
+- example kernels: linear (dot)
+  - $k(x,y) = dot(\Phi(x),\Phi(y))$, $\Phi$ as feature map
+  - polynomial kernel
+  - gaussian kernel $k(x,y)=\exp(-\frac{||x-y||^2}{2\sigma^2})$, $sigma$ as bandwidth, aka radial basis function (RBF), squared exponential kernel, _most used_
+- $K = \Phi_X \Phi_X^T$, $k(x^*) = \Phi_X \phi(x^*)$
+
+### Kernel Trick
+
+- Kernels can be used for all feature based algorithms that can be rewritten such that they contain inner products of feature vectors (aka kernel trick)
+- kernels can store the data in an _infinite dim feature space_
+  - just save the dot product, not the infinite dim feature
+- this is a _more powerful representation_ than linear features
 
 ## Support Vector Machines
 
