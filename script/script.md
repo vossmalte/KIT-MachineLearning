@@ -286,8 +286,41 @@ Zusammenfassung der Vorlesung _Maschinelles Lernen -- Grundverfahren_ von Prof. 
 
 ## Density Estimation
 
+- Applications: Classify (generative approaches), Outlier, Generate new data
+
+### Parametric Density Estimation
+
+- for example Gaussian distribution, use MLE.
+
+### Non-Parametric Density Estimation
+
+- Histogram: Discretize input space into bins, count samples per bin.
+  - general, brute force, but curse of dimensionality problem
+- Kernel Density Estimation ($V \rightarrow K$)
+  - ``count data points in kernel'' around input point: $K(x_*) = \sum_{i=1}^N{g(x_*-x_i)}$
+  - Estimated density: $p(x_*) \approx \frac{K(x_*)}{NV}$
+  - Parzen Window: d-dim. Hypercube, edge length h: simple but not smooth
+  - Gaussian Kernel: smooth but expensive
+- K-nearest neighbor ($K \rightarrow V$)
+  - find out min. radius of kernel (sphere, ...) so that K data points inside
+- Hyperparameter! (bin size / kernel bandwidth / K) $\rightarrow$ use Cross-validation.
+
+### Micture Models
+
+- Idea: Weighted sum of individual distributions.
+- GMM (Gaussian Mixture Model) parameters: coefficients (``weights''), means, variances
+- Gradient Descent not efficient $\Rightarrow$ use **EM**
+
 ## Expectation Maximization
 
+- estimate latent variable models (GMM, ...)
+- Kullback-Leibler Divergence: similarity measure for distributions (0, iff distributions are the same).
+- marginal log-like = Lower Bound + KL Divergence.
+- Algorithm:
+  1. E: find q(z) that minimizes KL: $q(z) = p(z~|~x, \phi_{old})$ (Lower Bound goes up)
+  1. M: maximize lower bound (maximize $\phi$): increases likelihood
+
+- Todo a lot of shit but i dont understand EM... :)
 ## Kernel Methods
 
 ## Support Vector Machines
