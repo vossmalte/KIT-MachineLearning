@@ -313,15 +313,64 @@ Zusammenfassung der Vorlesung _Maschinelles Lernen -- Grundverfahren_ von Prof. 
 
 ## Expectation Maximization
 
-- estimate latent variable models (GMM, ...)
+- Goal: estimate latent variable models (GMM, ...)
 - Kullback-Leibler Divergence: similarity measure for distributions (0, iff distributions are the same).
 - marginal log-like = Lower Bound + KL Divergence.
 - Algorithm:
-  1. E: find q(z) that minimizes KL: $q(z) = p(z~|~x, \phi_{old})$ (Lower Bound goes up)
-  1. M: maximize lower bound (maximize $\phi$): increases likelihood
+  1. E: find q(z) that minimizes KL: $q(z) = p(z~|~x, \theta_{old})$ (Lower Bound goes up)
+  1. M: maximize lower bound (maximize $\theta$): increases likelihood
+- Notes:
+  - we assume that E-Step can set KL to zero. Only possible if z is discrete or we have linear Gaussian models.
+  - more complex models (Deep NNs,...): Extension of EM: Variational Bayes / Variational Inference
 
-- Todo a lot of shit but i dont understand EM... :)
+
+### EM for GMM
+
+- E: Compute responsibilities $q_{ik} = p(z=k|x_i)$
+- M: Update $\theta$:
+  - Update coefficients of components using responsibilities: $\pi_k = \frac{\sum_i q_{ik}}{N}$
+  - Update components independently:
+    - $\mu_k = \frac{\sum_i q_{ik} x_i}{\sum_i q_{ik}}$, $\Sigma_k = \frac{\sum_i q_{ik} (x_i - \mu_k)(x_i - \mu_k)^T}{\sum_i q_{ik}}$
+
+- K-means is special case of EM: Co-variances $\approx0$, responsibilities $q_{ik}$ of nearest cluster 1, others 0
+- K-means is used to init. means of EM. EM is more expensive but also yields means, variances.
+- number of components: model-selection problem.
+
+### EM for PCA
+
+- Latent variables: for each data point $x$, the representation $z$ in **low-d space (latent space)** as a Gauß-Distribution and samples of $z$.
+- Parameters: $W$ (projection to low-d.) and $\mu$.
+- Expectation: Compute mean and covariance of $z_i$'s, Generate latent samples.
+- Maximization: Update $W$, $\mu$ and $\sigma^2$ (like linear regression):
+  - $\left[\begin{array}{c} \mu \\ W \end{array}\right]=\left(Z^{T} Z\right)^{-1} Z^{T} X$
+
 ## Kernel Methods
+
+- is: comparison function $k$ of two points, symmetric.
+- Kernel Matrix $K \in \mathbb{R}^{n \times n}$ (Similarity matrix): $[K]_{ij} = k(x_i, x_j($)$
+- more powerful representation than linear feature models.
+
+### Positive Definite Kernels
+
+- $k$ is positive definite => $K$ is spd (symmetric positive definite)
+- mapping $\phi$ to a feature space => $k(x,x') = \langle \phi(x),\phi(x')\rangle$ is a positive definite kernel.
+- $k$ positive definite => $\exists$ feature space, mapping $\phi$, so that $k$ is as above.
+- Let $\Phi_X$ ``rows: $\theta(x_i)^T$''
+  - $K = \Phi_X \Phi_X^T$
+  - define $k(x^*) = \Phi_X \theta(x^*)$
+- Examples:
+  - linear kernel: $k$ is scalar product
+  - polynomial kernel: $k(x,x') = \langle x, x'\rangle^d$
+  - **Gaussian Kernel**: $k(x, y)=\exp \left(-\frac{\|x-y\|^{2}}{2 \sigma^{2}}\right)$
+    - most used kernel, can be written as inner product of 2 infinite dim. feature vectors,
+    - mapping ($\mu$): $\phi_{\mu} (x) = 1/Z \exp \left(-\frac{\|x-\mu\|^{2}}{4 \sigma^{2}}\right)$
+    - **kernel trick**: Map data in an infinite dimensional feature space (feature vector is implicit, we can evaluate the inner product of two feature vectors).
+
+### Kernel Ridge Regression
+
+- $f^*(x) = k(x)^T (K + \lambda I)^{-1} y$
+- use Gaussian Kernel, hyperparameters: sigma.
+- Fazit: flexible representation, few hyperparameters BUT expensive (inverse, store all samples).
 
 ## Support Vector Machines
 
