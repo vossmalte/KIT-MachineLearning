@@ -233,7 +233,7 @@ Zusammenfassung der Vorlesung _Maschinelles Lernen -- Grundverfahren_ von Prof. 
 - Loss: squared reproduction error (equiv.: variance of projection, after zero-mean)
 
 - How: PCA (Principle Component Analysis)
-  - idea: first principal dimension is direction of maximal variance (biggest Eigenvector of $\Sigma$), solve constraint optimisation: $u_1 = \min_u u^T\Sigma u$ so that $u^T u = 1$)
+  - idea: first principal dimension is direction of maximal variance (biggest Eigenvector of $\Sigma$), solve constraint optimization: $u_1 = \min_u u^T\Sigma u$ so that $u^T u = 1$)
   - zero-mean data
   - compute covariance matrix
   - choose first M largest Eigenvalues
@@ -241,7 +241,7 @@ Zusammenfassung der Vorlesung _Maschinelles Lernen -- Grundverfahren_ von Prof. 
   - based of application performance or so that some fraction of the variance is covered
 - Applications: lower dimension and find more natural coordinate system, ``capture the essence''
 
-### Constraint Optimisation (Langrangian Multipliers)
+### Constraint Optimization (Lagrangian Multipliers)
 
 - $\min_x f(x) \text{ so that } foo \geq 0$: lagrangian $= f(x) - \lambda (foo)$.
 - optimization: $\min_x \max_\lambda L(x,\lambda)$, $\lambda > 0$
@@ -305,7 +305,7 @@ Zusammenfassung der Vorlesung _Maschinelles Lernen -- Grundverfahren_ von Prof. 
   - find out min. radius of kernel (sphere, ...) so that K data points inside
 - Hyperparameter! (bin size / kernel bandwidth / K) $\rightarrow$ use Cross-validation.
 
-### Micture Models
+### Mixture Models
 
 - Idea: Weighted sum of individual distributions.
 - GMM (Gaussian Mixture Model) parameters: coefficients (``weights''), means, variances
@@ -345,26 +345,30 @@ Zusammenfassung der Vorlesung _Maschinelles Lernen -- Grundverfahren_ von Prof. 
   - $\left[\begin{array}{c} \mu \\ W \end{array}\right]=\left(Z^{T} Z\right)^{-1} Z^{T} X$
 
 ## Kernel Methods
-
-- is: comparison function $k$ of two points, symmetric.
+### (Positive Definite) Kernels
+- comparison function $k$ of two points, symmetric.
 - Kernel Matrix $K \in \mathbb{R}^{n \times n}$ (Similarity matrix): $[K]_{ij} = k(x_i, x_j($)$
-- more powerful representation than linear feature models.
-
-### Positive Definite Kernels
-
-- $k$ is positive definite => $K$ is spd (symmetric positive definite)
-- mapping $\phi$ to a feature space => $k(x,x') = \langle \phi(x),\phi(x')\rangle$ is a positive definite kernel.
-- $k$ positive definite => $\exists$ feature space, mapping $\phi$, so that $k$ is as above.
-- Let $\Phi_X$ ``rows: $\theta(x_i)^T$''
-  - $K = \Phi_X \Phi_X^T$
-  - define $k(x^*) = \Phi_X \theta(x^*)$
+- math stuff:
+  - $k$ is positive definite => $K$ is spd (symmetric positive definite)
+  - mapping $\phi$ to a feature space => $k(x,x') = \langle \phi(x),\phi(x')\rangle$ is a positive definite kernel.
+  - $k$ positive definite => $\exists$ feature space, mapping $\phi$, so that $k$ is as above.
+  - Let $\Phi_X$ ``rows: $\theta(x_i)^T$''
+    - $K = \Phi_X \Phi_X^T$
+    - define $k(x^*) = \Phi_X \theta(x^*)$
 - Examples:
   - linear kernel: $k$ is scalar product
   - polynomial kernel: $k(x,x') = \langle x, x'\rangle^d$
   - **Gaussian Kernel**: $k(x, y)=\exp \left(-\frac{\|x-y\|^{2}}{2 \sigma^{2}}\right)$
     - most used kernel, can be written as inner product of 2 infinite dim. feature vectors,
     - mapping ($\mu$): $\phi_{\mu} (x) = 1/Z \exp \left(-\frac{\|x-\mu\|^{2}}{4 \sigma^{2}}\right)$
-    - **kernel trick**: Map data in an infinite dimensional feature space (feature vector is implicit, we can evaluate the inner product of two feature vectors).
+
+### Kernel Trick
+
+- _kernel methods_ are algorithms that take $K$ as input
+- Kernels can be used for all feature based algorithms that can be rewritten such that they contain inner products of feature vectors (aka kernel trick)
+- kernels can store the data in an _infinite dim feature space_
+  - just save the dot product, not the infinite dim feature
+- this is a _more powerful representation_ than linear features
 
 ### Kernel Ridge Regression
 
