@@ -349,9 +349,9 @@ Zusammenfassung der Vorlesung _Maschinelles Lernen -- Grundverfahren_ von Prof. 
 - comparison function $k$ of two points, symmetric.
 - Kernel Matrix $K \in \mathbb{R}^{n \times n}$ (Similarity matrix): $[K]_{ij} = k(x_i, x_j($)$
 - math stuff:
-  - $k$ is positive definite => $K$ is spd (symmetric positive definite)
-  - mapping $\phi$ to a feature space => $k(x,x') = \langle \phi(x),\phi(x')\rangle$ is a positive definite kernel.
-  - $k$ positive definite => $\exists$ feature space, mapping $\phi$, so that $k$ is as above.
+  - $k$ is positive definite $\Rightarrow$ K$ is spd (symmetric positive definite)
+  - mapping $\phi$ to a feature space $\Rightarrow$ $k(x,x') = \langle \phi(x),\phi(x')\rangle$ is a positive definite kernel.
+  - $k$ positive definite $\Rightarrow$ $\exists$ feature space, mapping $\phi$, so that $k$ is as above.
   - Let $\Phi_X$ ``rows: $\theta(x_i)^T$''
     - $K = \Phi_X \Phi_X^T$
     - define $k(x^*) = \Phi_X \theta(x^*)$
@@ -377,6 +377,25 @@ Zusammenfassung der Vorlesung _Maschinelles Lernen -- Grundverfahren_ von Prof. 
 - Fazit: flexible representation, few hyperparameters BUT expensive (inverse, store all samples).
 
 ## Support Vector Machines
+
+- Support Vectors: Data points closest to decision boundary (i.e. in linear classification)
+- Note: Classes are called positive and negative
+- Goal: **maximize margin** (min. dist. between decision boundary and Support Vectors)
+  - Distance: $w^Tx+b$
+  - Condition: $y_i(w^Tx+b) \geq 1$.
+  - Margin is $\frac{2}{\|w\|}$ $\Rightarrow$ Quadratic Opt. Problem: minimize $\|w\|^2$
+- Variant Soft Max-Margin: slack-variables $\xi \geq 0$ allow violation of margin: $y_i(w^Tx_i+b) \geq 1-\xi_i$
+  - punish slack variables: minimize ${\|w\|}^2 + C \sum_i^N\xi_i$
+- Hinge Loss: replace $\xi_i$ with $\max(0, 1-y_i f(x_i))$ (``loss function'' is 0 for correct classification!)
+  - not differentiable $\Rightarrow$ use **Sub-Gradient Descent** (see slides, not covered here)
+- Compare to LR: more balanced boundary, less sensitive to outliers
+
+### SVMs with Kernels
+
+- Formulate SVM with features: conditions now $y_i(w^T\theta(x_i) + b) \geq 1$
+- Lagrangian shit happens.
+- Choosing C: Model Selection Problem. low C means small complexity.
+
 
 ## Bayesian Learning
 
