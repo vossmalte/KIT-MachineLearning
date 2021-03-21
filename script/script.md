@@ -399,6 +399,48 @@ Zusammenfassung der Vorlesung _Maschinelles Lernen -- Grundverfahren_ von Prof. 
 
 ## Bayesian Learning
 
+- Goal: Estimate uncertainty in estimated parameters $\theta^*$
+- 2 Basic steps:
+  1. Compute probability of ``being right'' $p(\theta~|~D)$ using Bayes:
+    - posterior = data likelihood x prior / evidence $= p(D|\theta) p(\theta) / p(D)$
+  2. Predicting of new data-point $x^*$ / distribution
+    - marginal distribution = Integrate over all $\theta$: likelihood x posterior
+- Priors: capture our belief and domain knowledge, for example ``weights should be small''. $p(\theta) = N(\theta|0, \lambda^{-1}I)$
+- Posterior: quantifies our uncertainty in the model
+  - **Conjugate Prior** for some likelihood function: if posterior and prior are in same distribution family
+- Observations
+  - Variance decreases with more samples
+  - Posterior mean interpolates between prior mean and sample average
+  - predictive variance = posterior variance + uncertainty of mean
+  - small dataset: model shows uncertainity; large dataset: $\approx$ MLE
+  - **robust againts overfitting** (model averages over unspecified behaviour), need no test set, but **hard to compute**
+  - closed form only for linear feature / kernelized regression
+
+### Simplification: Maximum A-posteriori (MAP) Solution
+
+- use parameter vector $\theta_{MAP}$ that maximizes posterior for prediction
+- ignore Uncertainty
+- Example: Regression: is equivalent to Ridge Regression using L2-Regularisation
+
+### Bayesian Regression Algorithms
+
+- Linear Regression: only one with closed form. Use Gaussian Prior.
+  - posterior mean is equivalent to MAP, variance not
+  - predictive distribution: mean equivalent to MAP, variance is input dependent: small near data points. For many data points, model uncertainity vanishes , noise variance remains
+
+### Gaussian Processes
+
+- probability distribution over functions. Kernelized version of Bayesian Linear Regression.
+- Ingredients:
+  - mean function
+  - covariance function (positive definite, ``prior belief in the smoothness'')
+
+- Predictive GP distribution:
+  - the mean corresponds to the Kernel Ridge Regression solution
+  - variance again input dependent
+
+- Kernels and Hyperparameters: prior precision, noise variance, length scale (global or per dimension (Automatic Relevance Determination Kernel)) $\Rightarrow$ gradient descent.
+
 ## Neural Networks
 
 ## Conclusion
