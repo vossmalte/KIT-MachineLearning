@@ -246,7 +246,7 @@ Zusammenfassung der Vorlesung _Maschinelles Lernen -- Grundverfahren_ von Prof. 
 - $\min_x f(x) \text{ so that } foo \geq 0$: lagrangian $= f(x) - \lambda (foo)$.
 - optimization: $\min_x \max_\lambda L(x,\lambda)$, $\lambda > 0$
 - slatters condition: convex objective and convex constraints, dual is equivalent:
-  - dual: $\lambda^* = \max_\lambda \min_x L(x, \lambda)$ 
+  - dual: $\lambda^* = \max_\lambda \min_x L(x, \lambda)$
   - then $x^* = \min_x L(x, \lambda^*)$
 
 ## Clustering
@@ -323,7 +323,6 @@ Zusammenfassung der Vorlesung _Maschinelles Lernen -- Grundverfahren_ von Prof. 
   - we assume that E-Step can set KL to zero. Only possible if z is discrete or we have linear Gaussian models.
   - more complex models (Deep NNs,...): Extension of EM: Variational Bayes / Variational Inference
 
-
 ### EM for GMM
 
 - E: Compute responsibilities $q_{ik} = p(z=k|x_i)$
@@ -345,7 +344,9 @@ Zusammenfassung der Vorlesung _Maschinelles Lernen -- Grundverfahren_ von Prof. 
   - $\left[\begin{array}{c} \mu \\ W \end{array}\right]=\left(Z^{T} Z\right)^{-1} Z^{T} X$
 
 ## Kernel Methods
+
 ### (Positive Definite) Kernels
+
 - comparison function $k$ of two points, symmetric.
 - Kernel Matrix $K \in \mathbb{R}^{n \times n}$ (Similarity matrix): $[K]_{ij} = k(x_i, x_j($)$
 - math stuff:
@@ -396,7 +397,6 @@ Zusammenfassung der Vorlesung _Maschinelles Lernen -- Grundverfahren_ von Prof. 
 - Lagrangian shit happens.
 - Choosing C: Model Selection Problem. low C means small complexity.
 
-
 ## Bayesian Learning
 
 - Goal: Estimate uncertainty in estimated parameters $\theta^*$
@@ -412,7 +412,7 @@ Zusammenfassung der Vorlesung _Maschinelles Lernen -- Grundverfahren_ von Prof. 
   - Variance decreases with more samples
   - Posterior mean interpolates between prior mean and sample average
   - predictive variance = posterior variance + uncertainty of mean
-  - small dataset: model shows uncertainity; large dataset: $\approx$ MLE
+  - small dataset: model shows uncertainty; large dataset: $\approx$ MLE
   - **robust againts overfitting** (model averages over unspecified behaviour), need no test set, but **hard to compute**
   - closed form only for linear feature / kernelized regression
 
@@ -420,13 +420,13 @@ Zusammenfassung der Vorlesung _Maschinelles Lernen -- Grundverfahren_ von Prof. 
 
 - use parameter vector $\theta_{MAP}$ that maximizes posterior for prediction
 - ignore Uncertainty
-- Example: Regression: is equivalent to Ridge Regression using L2-Regularisation
+- Example: Regression: is equivalent to Ridge Regression using L2-Regularization
 
 ### Bayesian Regression Algorithms
 
 - Linear Regression: only one with closed form. Use Gaussian Prior.
   - posterior mean is equivalent to MAP, variance not
-  - predictive distribution: mean equivalent to MAP, variance is input dependent: small near data points. For many data points, model uncertainity vanishes , noise variance remains
+  - predictive distribution: mean equivalent to MAP, variance is input dependent: small near data points. For many data points, model uncertainty vanishes , noise variance remains
 
 ### Gaussian Processes
 
