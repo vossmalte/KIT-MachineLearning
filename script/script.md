@@ -443,6 +443,28 @@ Zusammenfassung der Vorlesung _Maschinelles Lernen -- Grundverfahren_ von Prof. 
 
 ## Neural Networks
 
+- Neuron: $y = \phi(w^Tx+b)$, Non-linear activation function $\phi$
+- Activation Function $\phi$:
+  - Sigmoid $= (1+e^{-x})^{-1}$ interpretation as "firing rate"
+  - tanh(x)
+  - ReLU(x) $= max(0, x)$ (used in practice)
+  - Leaky ReLU $= max(0.1x, x)$
+  - ELU $= \alpha (exp(x) - 1)$ for $x<0$: Negative saturation regime compared to Leaky. Adds some robustness to noise
+- good Activation Function:
+  - **No saturation** in + region $Leftrightarrow \phi(x) \rightarrow \infty (x \rightarrow \infty)$ (?)
+  - Zero-Centered output
+  - gradient $\neq 0$ exists
+  - easy to compute
+
+### Feedforward Neural Network / Multi-layer perceptrons
+
+- Layers of Neurons that Feed Foreward the Input
+  - are "black box"
+- Activation per layer: $f(x) = \phi(Wx + b)$ (N input and M output units, represented by Matrix W).
+- Function: 
+ (vs. Recurrent Neural Networks, that have Cycles)
+
+
 ## Conclusion
 
 Thank you, `pandoc`!
