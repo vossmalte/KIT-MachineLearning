@@ -30,6 +30,7 @@ Zusammenfassung der Vorlesung _Maschinelles Lernen -- Grundverfahren_ von Prof. 
 - Matrix calculus: $\nabla_x f(x) := \frac{\partial f(x)}{\partial x}$
   - $\nabla_x x^T x = 2x$
   - $\nabla_x x^T A x = 2 A x$
+  - $\nabla_W f = \frac{\partial f(z)}{\partial z} x^T$ (for $z = Wx + b$)
 
 ### Probability Theory
 
@@ -459,12 +460,87 @@ Zusammenfassung der Vorlesung _Maschinelles Lernen -- Grundverfahren_ von Prof. 
 ### Feedforward Neural Network / Multi-layer perceptrons
 
 - Layers of Neurons that Feed Foreward the Input
-  - are "black box"
+  - are "black box", $\Rightarrow$ _modularity_
 - Activation per layer: $f(x) = \phi(Wx + b)$ (N input and M output units, represented by Matrix W).
-- Function: 
- (vs. Recurrent Neural Networks, that have Cycles)
+- use **nonlinear activation function** $\Rightarrow$ universal function approximator (approximate any function arbitrarily well using many units)
+- Universal Function Apgproximation Theorem: Single layer also achieves universality
+- Using multiple layers $\Rightarrow$ **compact representation** (more important than universality)
+- Learning using loss function and regularisation
+
+- Examples of loss functions:
+  - Deterministic linear Regression: squared error
+  - Probabilistic Regression (linear Gaussian(output)): negative log-likelihood
+  - Deterministic Binary classification (linear): hinge-loss
+  - Probabilistic Binary classification (sigmoid(output)): negative log-likelihood
+  - Deterministic Multi-class classification: multiclass SVM loss
+  - Probabilistic Multi-class classification (sigmoid(output)): negative log-likelihood 
+  
+- Feature Learning: Networc can be viewed as linear regression in feature space (last layer performs regression, others compute features)
+
+### NN-Training: back-propagation
+
+Use back-propagation to compute gradients; then do gradient descent to find optimal parameters
+
+1. draw Computation graph
+1. Compute loss (forward pass: input x, weights, biases)
+2. Compute ``derivative'' (backward pass: input resulted state of network, output error of weights, biases)
+    - Set $\bar{L} = 1$
+    - Use Chain rule: $\bar{t} = \frac{d}{dt}f(x(t), y(t)) = \bar{x} x'(t) + \bar{y} y'(t)$
 
 
+$\Rightarrow$ Widely used, cost linear(#layers) quadratic(#units per layer), BUT many local optima (high dimension) and neurally implausible (in human brain)
+
+### NN-Training: gradient descent
+
+- Use Mini-Batches: $\theta_{t+1} = \theta_{t} - \mu *$ mean of gradients of subset of samples (between stochastic and batch gradient descent)
+- Learning Rate $\mu$: model selection problem - avoid oscillations (High learning rate)
+- Problems: jitter along step direction ($\Rightarrow$ slow progress), local minima, noisy loss function due to minibatches
+
+- Variants (faster):
+  - Momentum Gradient Descent (``velocity term'' for the update. Gradient: acceleration.)
+  - Gradient Normalisation / RMSProp: smaller steps in steep areas, normalize gradient
+  - **ADAM** Adaptive Momentum (both combined) $\rightarrow$ most-used
+  - $\Rightarrow$ ``base learning rate'' fix hyperparameter. 
+- $\Rightarrow$ Learning Rate Decay:
+  - Step: reduce learning rate at few fixed points
+  - Cosine, Linear, Inverse sqrt,...
+(vs. Recurrent Neural Networks, that have Cycles)
+
+### 2nd order methods
+
+- Second order optimization: quadratic equivalent to Newton's Method using Hessian (Taylor Approximation)
+- no hyperparameters, learning rate, faster, BUT way too expensive (Size of Hessian)
+- Quasi-Newton methods (BFGS, L-BFGS): approximate inverse Hessian, 
+
+### NN Regularization
+
+- stardard methods: Model-Selection(#neurons,#layers), early stopping, loss function, data augmentation
+- Model ensembles: average out ``unspecified behaviour'': train multiple independent models, at test time average their results
+- Snapshot ensembles: use multiple snapshots of a single model; use cyclic learning rates
+- Dropout: randomly drop neurons (Probability of dropout: e.g. 0.5)
+  - forces redundancy, prevents co-adaptation
+  - Testing: evaluate expectation 
+    - Ensemble view: Average over mult. dropout masks
+    - Expectation view: Expected input of neuron: ``input x weight x dropout rate''
+- Drop Connect: drop connections in training
+
+### Practical considerations
+
+- Data Processing (normalization): zero-mean unit-variance, sometimes PCA
+  - less sensitive to small changes $\Rightarrow$ easier to optimize
+- Weight Initialization: 
+  - Problem: activation amount unstable (when using Gauss-random weights)
+  - Solution: Xavier initialization (deviation different in different layers)
+- Workflow with NNs
+  1. Check initial loss
+  2. Overfit small sampe
+  3. Find Learningrate (all training data)
+  4. Find best learning rate, weight decay by grid strategy
+- Error sources
+  - Loss starts going down late: bad init
+  - Loss plateaus: use decay only when learning rate is not going down anymore
+  - Train-Val-Accuracy: big gap = overfitting, no gap = underfitting
+  
 ## Conclusion
 
 Thank you, `pandoc`!
