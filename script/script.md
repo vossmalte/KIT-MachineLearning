@@ -459,7 +459,7 @@ Zusammenfassung der Vorlesung _Maschinelles Lernen -- Grundverfahren_ von Prof. 
 
 ### Feedforward Neural Network / Multi-layer perceptrons
 
-- Layers of Neurons that Feed Foreward the Input
+- Layers of Neurons that Feed Forward the Input (FC / Fully Connected layers)
   - are "black box", $\Rightarrow$ _modularity_
 - Activation per layer: $f(x) = \phi(Wx + b)$ (N input and M output units, represented by Matrix W).
 - use **nonlinear activation function** $\Rightarrow$ universal function approximator (approximate any function arbitrarily well using many units)
@@ -504,7 +504,6 @@ $\Rightarrow$ Widely used, cost linear(#layers) quadratic(#units per layer), BUT
 - $\Rightarrow$ Learning Rate Decay:
   - Step: reduce learning rate at few fixed points
   - Cosine, Linear, Inverse sqrt,...
-(vs. Recurrent Neural Networks, that have Cycles)
 
 ### 2nd order methods
 
@@ -540,7 +539,46 @@ $\Rightarrow$ Widely used, cost linear(#layers) quadratic(#units per layer), BUT
   - Loss starts going down late: bad init
   - Loss plateaus: use decay only when learning rate is not going down anymore
   - Train-Val-Accuracy: big gap = overfitting, no gap = underfitting
-  
+
+### CNNs
+
+- Image based inputs afford huge amount of weights using Feedforward
+- Structure:
+  - multiple Convolution Layers, with ReLU-activation and pooling functions
+  - FC layers at end
+- **Convolutional Layer**: exploit spatial structure
+  - Convolve the filter with the image ("slide filter (5x5x3) over image (32x32x3)"):
+    - dot product between chunk of image and filter ( + bias) -> activation map
+  - Hyperparameters
+    - F Kernel Size
+    - K multiple filters -> multiple activation maps
+    - S Stride: step-size of convolution
+    - P Padding: fill up image borders (zeros)
+- **Pooling Layer**: Downsample Activation maps
+  - max-pooling: new pixel = max of z.b. 2x2-"chunk"
+- ResNet: deeper models (normally harder to optimize $\Rightarrow$ trick:)
+  - use Residual blocks: "add signal of layer to original value, set layer output to 0 at beginning".
+- transfer learning: reuse conv layers, only adapt FC layers
+
+### RNNs
+
+- Process Series of inputs, generate series of outputs, state as "memory"
+  - $h_t = f_W(h_{t-1}, x_t)$, where h: state, x: input, W: fixed (learned) parameters / weight mask
+  - Variants: many to many, many to one, one to many, sequence to sequence
+- Learning: Backpropagation through Time (BPTT)
+  - forward through entire sequence to compute loss, then backward through entire sequence to compute gradient.
+  - more efficient: Truncated BPTT (only go back some amount)
+- Problems with Back propagation:
+  - gradient explodes $\Rightarrow$ use gradient clipping (downscale big gradient)
+  - gradient vanishes $\Rightarrow$ use additive interactions for memory: LSTM
+- **LSTM**: Long-term short-term memory.
+  - memory with gates (forget, input, output)
+  - Backpropagation not interrupted. Similar to ResNet.
+  - Deep LSTMs: stack LSTMs vertically, output goes to next layer
+
+
 ## Conclusion
+
+ML is amazing
 
 Thank you, `pandoc`!
