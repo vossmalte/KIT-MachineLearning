@@ -193,15 +193,14 @@ Zusammenfassung der Vorlesung _Maschinelles Lernen -- Grundverfahren_ von Prof. 
   - slow prediction
   - bad at high-dim input
 - kNN: find k nearest neighbors and return "average" of these
-- decision boundary ~ Voronoi diagram
 - choose k by cross-validation (small k $\Rightarrow$ overfitting)
 - metrics: euclidean, cosine, hamming, manhattan, Mahalanobis
 - performance of kNN degrades with more (irrelevant) dimensions
-- curse of dimensionality
+- **curse of dimensionality**
   - in high dimensions most points are far away from the origin
   - most points are equally far away from each other $\Rightarrow$ neighborhood is hard to calculate
   - remedies: feature selection, dimensionality reduction
-- KD-trees to find the neighbors
+- **use KD-trees** to find the neighbors
   - _build_: choose axis, split at median, repeat until only leafs
   - _search_: find region containing x, then move up recursively to extend neighborhood
 
@@ -209,7 +208,7 @@ Zusammenfassung der Vorlesung _Maschinelles Lernen -- Grundverfahren_ von Prof. 
 
 - nodes are (binary) splitting criterions
   - in regression: return average of the node
-    - left / right split with residual sum of squares (RSS)
+    - left / right split with residual sum of squares (RSS) (minimize variance in subtree)
   - in classification: majority vote
     - left / right split with minimum entropy in subtrees
 - when to stop splitting? minimum number of samples per node or maximum depth reached
@@ -220,7 +219,8 @@ Zusammenfassung der Vorlesung _Maschinelles Lernen -- Grundverfahren_ von Prof. 
 
 - use average of multiple trees to improve accuracy
 - randomization: grow some trees
-  - at each node: select some samples and do the split
+  - each tree: random bootstrap sample
+  - at each node: randomly select variables to split at, do the split at best of them
   - effect: increased variability of the single trees, a tree is less likely to over-specialize, all trees are less likely to overfit
 - Random forest is a good ML method but not easy to interpret
 
