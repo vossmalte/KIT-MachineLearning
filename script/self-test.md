@@ -7,7 +7,36 @@ date: "\\today"
 
 ## Linear Regression
 
+What a regression problem is
+
+How to obtain the Least Squares solution in closed form
+- Only possible as the cost function is quadratic in the weights
+
+Generalized Linear Regression
+- Non linear functions in x are fine as long as linear in w
+
+Avoid overfitting by keeping the weights small
+
+Expectations can be evaluated by samples
+
+How to compute the ML estimator
+
+Maximum likelihood is equivalent to minimizing the squared loss for:
+- Conditional Gaussian models with constant noise
+
 ## Linear classification
+
+Relation between maximum likelihood and least squares
+
+What is a linear classification problem ...
+
+... and how to formalize it as likelihood maximization problem
+- Sigmoid likelihood for binary classification
+- Soft max likelihood for multi class
+
+What is gradient descent, stochastic gradient descent and mini batches?
+
+How to apply gradient descent to logistic regression
 
 ## Model selection
 
