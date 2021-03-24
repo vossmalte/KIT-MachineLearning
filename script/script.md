@@ -234,19 +234,19 @@ Zusammenfassung der Vorlesung _Maschinelles Lernen -- Grundverfahren_ von Prof. 
 - Loss: squared reproduction error (equiv.: variance of projection, after zero-mean)
 
 - How: PCA (Principle Component Analysis)
-  - idea: first principal dimension is direction of maximal variance (biggest Eigenvector of $\Sigma$), solve constraint optimization: $u_1 = \min_u u^T\Sigma u$ so that $u^T u = 1$)
-  - zero-mean data
+  - idea: first principal dimension is direction of maximal variance (biggest Eigenvector of $\Sigma$), solve constraint optimization: $u_1 = \min_u u^T\Sigma u$ so that $||u|| = 1$)
+  - zero-mean data (center at 0)
   - compute covariance matrix
   - choose first M largest Eigenvalues
 - How to choose dimension?
-  - based of application performance or so that some fraction of the variance is covered
-- Applications: lower dimension and find more natural coordinate system, ``capture the essence''
+  - based of application performance or so that some fraction of the variance is covered (sum of chosen eigenvalues is close to sum of all eigenvalues)
+- Applications: lower dimension and find more natural coordinate system, ``capture the essence'', preprocess high-dim data
 
 ### Constraint Optimization (Lagrangian Multipliers)
 
 - $\min_x f(x) \text{ so that } foo \geq 0$: lagrangian $= f(x) - \lambda (foo)$.
 - optimization: $\min_x \max_\lambda L(x,\lambda)$, $\lambda > 0$
-- slatters condition: convex objective and convex constraints, dual is equivalent:
+- slaters condition: convex objective and convex constraints, dual is equivalent:
   - dual: $\lambda^* = \max_\lambda \min_x L(x, \lambda)$
   - then $x^* = \min_x L(x, \lambda^*)$
 
@@ -263,27 +263,30 @@ Zusammenfassung der Vorlesung _Maschinelles Lernen -- Grundverfahren_ von Prof. 
   - detecting outliers
 - Construction:
   - bottom-up: merge ``closest'' clusters
-    - single linkage: minimum distance of points
-    - complete linkage: maximum distance of points
-    - average linkage
-    - centroid linkage
+    - start with each item in its own cluster
+    - metrics to merge clusters
+      - single linkage: minimum distance of points
+      - complete linkage: maximum distance of points
+      - average linkage
+      - centroid linkage: distance between the centers
   - (top-down)
 
-- intuitive, but costly
+- intuitive, but costly. no need to know the number of clusters in advance
 
 ### Flat Clustering: K-Means
 
 - Goal: minimize sum of squared distances
 - Algorithm:
-  - Pick k, place k ``cluster centers'' random or using Furthest First Initialisation:
+  - Pick k, place k ``cluster centers'' random or using Furthest First Initialization:
     - first center random data point
     - other centers at data point with max. min. distance from placed centers
   - Assign each sample to its closest centroid
   - put ``cluster centers'' on mean of the samples assigned to them
 - Convergence: (locally) minimizes the sum of squared differences - BUT: only local minimum
   - try multiple initializations
-- Choose k: "knee-finding method" using plot of SSD of result
+- Choose k: "knee-finding method" using plot of SSD of result (so do k-Means for different k and choose the largest k with significant improvement)
 - quick, but needs metric, can't handle outliers, noise or non-convex shapes
+- clustering is NP-Hard
 
 ## Density Estimation
 
@@ -301,9 +304,10 @@ Zusammenfassung der Vorlesung _Maschinelles Lernen -- Grundverfahren_ von Prof. 
   - ``count data points in kernel'' around input point: $K(x_*) = \sum_{i=1}^N{g(x_*-x_i)}$
   - Estimated density: $p(x_*) \approx \frac{K(x_*)}{NV}$
   - Parzen Window: d-dim. Hypercube, edge length h: simple but not smooth
-  - Gaussian Kernel: smooth but expensive
+  - Gaussian Kernel: smooth but expensive (challenge: choose kernel bandwidth)
 - K-nearest neighbor ($K \rightarrow V$)
   - find out min. radius of kernel (sphere, ...) so that K data points inside
+- kNN and KDE are the 'same' problem but with V (or K) being the variant variable
 - Hyperparameter! (bin size / kernel bandwidth / K) $\rightarrow$ use Cross-validation.
 
 ### Mixture Models
@@ -311,6 +315,7 @@ Zusammenfassung der Vorlesung _Maschinelles Lernen -- Grundverfahren_ von Prof. 
 - Idea: Weighted sum of individual distributions.
 - GMM (Gaussian Mixture Model) parameters: coefficients (``weights''), means, variances
 - Gradient Descent not efficient $\Rightarrow$ use **EM**
+  - Gradient Descent does not work well because of cyclic dependencies
 
 ## Expectation Maximization
 
@@ -318,11 +323,12 @@ Zusammenfassung der Vorlesung _Maschinelles Lernen -- Grundverfahren_ von Prof. 
 - Kullback-Leibler Divergence: similarity measure for distributions (0, iff distributions are the same).
 - marginal log-like = Lower Bound + KL Divergence.
 - Algorithm:
-  1. E: find q(z) that minimizes KL: $q(z) = p(z~|~x, \theta_{old})$ (Lower Bound goes up)
+  1. E: find $q(z)$ that minimizes KL: $q(z) = p(z~|~x, \theta_{old})$ (Lower Bound goes up)
   1. M: maximize lower bound (maximize $\theta$): increases likelihood
 - Notes:
   - we assume that E-Step can set KL to zero. Only possible if z is discrete or we have linear Gaussian models.
   - more complex models (Deep NNs,...): Extension of EM: Variational Bayes / Variational Inference
+  - only finds local optima
 
 ### EM for GMM
 
@@ -334,9 +340,9 @@ Zusammenfassung der Vorlesung _Maschinelles Lernen -- Grundverfahren_ von Prof. 
 
 - K-means is special case of EM: Co-variances $\approx0$, responsibilities $q_{ik}$ of nearest cluster 1, others 0
 - K-means is used to init. means of EM. EM is more expensive but also yields means, variances.
-- number of components: model-selection problem.
+- number of components: model-selection problem (overfitting for large number)
 
-### EM for PCA
+### EM for PCA: pPCA
 
 - Latent variables: for each data point $x$, the representation $z$ in **low-d space (latent space)** as a Gauß-Distribution and samples of $z$.
 - Parameters: $W$ (projection to low-d.) and $\mu$.
@@ -370,12 +376,14 @@ Zusammenfassung der Vorlesung _Maschinelles Lernen -- Grundverfahren_ von Prof. 
 - Kernels can be used for all feature based algorithms that can be rewritten such that they contain inner products of feature vectors (aka kernel trick)
 - kernels can store the data in an _infinite dim feature space_
   - just save the dot product, not the infinite dim feature
+  - the kernel is far more easy to compute than the covariance matrix
+  - does not need basis functions
 - this is a _more powerful representation_ than linear features
 
 ### Kernel Ridge Regression
 
-- $f^*(x) = k(x)^T (K + \lambda I)^{-1} y$
-- use Gaussian Kernel, hyperparameters: sigma.
+- $f^*(x) = k(x)^T (K + \lambda I)^{-1} y$ ($\lambda$ as regularizer)
+- use Gaussian Kernel, hyperparameter: sigma.
 - Fazit: flexible representation, few hyperparameters BUT expensive (inverse, store all samples).
 
 ## Support Vector Machines
@@ -390,22 +398,24 @@ Zusammenfassung der Vorlesung _Maschinelles Lernen -- Grundverfahren_ von Prof. 
   - punish slack variables: minimize ${\|w\|}^2 + C \sum_i^N\xi_i$
 - Hinge Loss: replace $\xi_i$ with $\max(0, 1-y_i f(x_i))$ (``loss function'' is 0 for correct classification!)
   - not differentiable $\Rightarrow$ use **Sub-Gradient Descent** (see slides, not covered here)
-- Compare to LR: more balanced boundary, less sensitive to outliers
+- Compare to logistic regression: more balanced boundary, less sensitive to outliers
 
-### SVMs with Kernels
+### SVM with Kernels
 
 - Formulate SVM with features: conditions now $y_i(w^T\theta(x_i) + b) \geq 1$
 - Lagrangian shit happens.
-- Choosing C: Model Selection Problem. low C means small complexity.
+- Choosing C: Model Selection Problem. low C means small complexity. (C scales the margin)
 
 ## Bayesian Learning
 
 - Goal: Estimate uncertainty in estimated parameters $\theta^*$
+- ![Bayes formula](bayes.png)
 - 2 Basic steps:
-  1. Compute probability of ``being right'' $p(\theta~|~D)$ using Bayes:
+  1. Compute probability of ``being right'' (posterior) $p(\theta~|~D)$ using Bayes:
     - posterior = data likelihood x prior / evidence $= p(D|\theta) p(\theta) / p(D)$
   2. Predicting of new data-point $x^*$ / distribution
     - marginal distribution = Integrate over all $\theta$: likelihood x posterior
+    - $\theta$ is integrated out
 - Priors: capture our belief and domain knowledge, for example ``weights should be small''. $p(\theta) = N(\theta|0, \lambda^{-1}I)$
 - Posterior: quantifies our uncertainty in the model
   - **Conjugate Prior** for some likelihood function: if posterior and prior are in same distribution family
@@ -576,9 +586,6 @@ $\Rightarrow$ Widely used, cost linear(#layers) quadratic(#units per layer), BUT
   - Backpropagation not interrupted. Similar to ResNet.
   - Deep LSTMs: stack LSTMs vertically, output goes to next layer
 
-
 ## Conclusion
 
 ML is amazing
-
-Thank you, `pandoc`!
