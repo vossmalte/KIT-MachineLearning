@@ -137,109 +137,138 @@ Why do we need sampling for continuous latent variables?
 ## Kernel Methods
 
 What are kernels and how are they useful?
-
+    - similarity measure
+    - provide more powerful representation (implicit feature mapping)
 What do we mean by the “Kernel trick”?
-
+    - get a more powerful representation than standard linear feature models: map data to inf. dim. feature space; use it by evaluating inner product of feature vectors
 How to use kernels in regression (using Kernel Regression)?
-
+    - evaluate w* = Phi^T * (K + \lambda I)^{-1} * y => need to invert Kernel matrix. (otherwise would need to invert covariance matrix)
 How to use kernels in classification (using SVMs)?
-
+    - w^* = \sum lambda_i y_i phi(x_i) (using constraint optimisation)
 Understand how to obtain dual optimization problems from the primal
-
+    - primal: argmin_x f(x): h(x)> b. 
+    - Lagrangian: f(x) - \lambda (h(x) - b)
+    - dual: max_\lambda: min_x (Lagrangian)
+    => they are equivalent if we have convex constraints and a convex f
 ... and its relation to kernel methods
-
+    - used for SVMs
 What is the definition of a kernel and its relation to an underlying feature space?
-
-Why are kernels more powerful than traditional feature based methods?
-
-What do we mean by the kernel trick?
-
-How do we apply the kernel trick to ridge regression?
+    - kernel: k is spd
+    - each kernel is equiv. to a feature space (possibly inf. dim.)
 
 ## SVM
 
 Why is it good to use a maximum margin objective for classification?
-
+    - maximizes "confidence", rules out unlikely seperators
 How can we define the margin as optimization problem?
-
+    - distance to margin: ( w^Tx_i + b ) / ||w||
+    - constraints: y_i(w^Tx_i + b) >= 1 => abstand = y_i(w^Tx_i + b)/||w|| >= 1/||w||
+    - goal: maximize 2/ ||w|| so that all data points have distance at least 1/||w|| to separator
 What are slack variables and how can they be used to get a “soft” margin?
-
+    - constraint: ">= 1 - \xi_i" -> allows violation of margin, part of regularisation: minimize those violations
 How is the hinge loss defined?
-
+    - max(0, 1 - y_i(w^Tx_i + b))
 What is the relation between the slack variables and the hinge loss?
-
+    - equivalent (hinge loss variant is derived from slack variables variant)
 What are the advantages and disadvantages in comparison to logistic regression?
-
+    - more robust to ausreißer
+    - more robust
 What is the difference between gradients and sub gradients
-
+    - gradient is a sub gradient
+    - gradient only exists for differentiable functions
+    - subgradient are not unique. s(x) valid <=> f(x + h) >= f(x) + s(x)^T*h
 ## Bayesian ML
 
 What are the 2 basic steps behind Bayesian Learning?
-
+    - compute posterior
+    - predict distribution
 Why is Bayesian Learning more robust against overfitting?
-
+    - also considers uncertainity of model as part of variance, integrate over all possible parameters (treat them as variables)
 What happens with the posterior if we add more data to the training set?
-
+    - distribution gets narrower (more confidence for parameters)
 What is completing the square and how does it work?
-
+    - quadratische ergänzung
 For which 2 cases can Bayesian Learning be solved in closed form?
-
+    - kernelized regression
+    - linear regression
 Which approximations can we use if no closed form is available?
-
+    - ???
 How can we derive Bayesian Linear regression
-
+    - ...
 What is the advantage of Bayesian Linear regression to Ridge regression? What is
 the conceptual difference?
-
+    - also considers uncertainity of model as part of variance
 What is the major advantage of GPs over Kernel Ridge Regression?
-
+    - also considers uncertainity of model
 Why are GPs a Bayesian approach?
-
+    - can be derived from Bayesian Regression point of view
 What principle allowed deriving GPs from a Bayesian regression point of view?
-
+    - ☺
 ## Neural Nets
 
 How does logistic regression relate to neural networks?
-
+    - last layer: linear combination of features ("weight vector")
+    - other layers: "feature selection"
 What kind of functions can single layer neural networks learn?
-
+    - any ☺ - if activation function nonlinear and inf. neurons availible.
 Why do we need non linear activation functions?
-
-What activation functions can we use and what are the advantages/disadvantages of
-those?
-
-What output layer and loss function to use given the task (regression,
-
-classification)?
+    - multiple "linear layers" can be squashed down to one
+        - we need nonlinearities to exploit mult. layers
+    - to being able to approximate any function (i.e."xor")
+What activation functions can we use and what are the advantages/disadvantages of those?
+    - sigmoid
+    - tanh
+    - ReLU
+    - leaky ReLU
+    - ELU
+What output layer and loss function to use given the task (regression,classification)?
+    - output layer | loss function
+        - reg: linear layer | SSE or negloglik
+        - class: sigmoid | negloglik or linear | hingeloss or softmax | negloglik
 
 Why not use a sigmoid activation function?
-
+    - saturation kills gradient
 Derive the equations for forward and backpropagation for a simple network
-
+    - nö.
 What is mini batch gradient descent? Why use it instead of SGD or full gradient descent?
-
+    - intermediate version of SGD and full gradient descent, 
+    - cheaper than full, and more reliable than SGD
 Why neural networks can overfit and what are the options to prevent it?
-
+    - because everything can overfit
+    - prevent:
+        - early stopping
+        - regularisation
+        - dropout
+        - ensemble
 Why is the initialization of the network important?
-
+    - neurons should learn *different* features, must be seperated somehow -> randomness
+    - activations tend to zero for deeper networks, no gradients -> use Xavier init.
 What can you read from the loss curves during training (validation and training loss)?
-
+    - high difference = overfitting
+    - no difference = underfitting
+    - training loss plateau: adapt learning rate (make smaller)
+    - validation loss decreases slowly: make learning rate bigger
 How can we accelerate gradient descent? How does Adam work?
+    - momentum (interpret as velocity)
+    - gradient normalisation (lear faster when it's flat)
+    - adam: use both
 
 ## RNN, DNN
 
-Why are fully connected networks for images a bad idea and why do we need
-images?
-
+Why are fully connected networks for images a bad idea and why do we need images?
+    - many weights
+    - for autonomous driving
 What are the key components of a CNN?
-
+    - filters, pooling layers
 What hyper parameters can we set for a convolutional layer and what is their
 meaning?
-
+    - number of filters, filter size, stride, padding
 What hyper parameters can we set for a pooling layer and what is their meaning?
-
+    - stride, size (size - stride: amount of overlapping, stride: size of output)
 How can we compute the dimensionality of the output of a convolutional layer
-
+    - (size - kernel_size + 2*padding)/stride + 1
 Describe basic properties of AlexNet and VCG
-
+    - deep networks
+    - convolutions + pooling, then FC at end
 What is the main idea of ResNet to make it very deep?
+    - more layers (works using Residual blocks)
